@@ -13,7 +13,14 @@ namespace AnnouncementAPI.Data
              : base(options)
         {
             this.options = options;
-            this.Database.Migrate();
+            try
+            {
+                this.Database.Migrate();
+
+            } catch (System.InvalidOperationException ex)
+            {
+                throw new InvalidDataException("Please check connectionstring in appsettings.json is pointing to a valid database!");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
