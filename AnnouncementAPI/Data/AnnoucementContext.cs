@@ -2,28 +2,25 @@
 
 namespace AnnouncementAPI.Data
 {
-    public class AnnoucementsContext : DbContext
+    public class AnnouncementsContext : DbContext
     {
-        public DbSet<Annoucement> Annoucements { get; set; }
 
-        public AnnoucementsContext(DbContextOptions<AnnoucementsContext> options)
+        private readonly DbContextOptions<AnnouncementsContext> options;
+
+        public DbSet<Announcement> Announcements { get; set; }
+
+        public AnnouncementsContext(DbContextOptions<AnnouncementsContext> options)
              : base(options)
         {
-        }
-
-        // The following configures EF to create a Sqlite database file in the
-        // special "local" folder for your platform.
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            var builder = WebApplication.CreateBuilder();
-            string connString = builder.Configuration.GetConnectionString("DefaultConnection");
-            options.UseSqlServer(connString);
+            this.options = options;
+            this.Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Annoucement>(entity =>
+            modelBuilder.Entity<Announcement>(entity =>
             {
                 entity.HasIndex(e => e.ID);
                 entity.HasKey(e => e.ID);

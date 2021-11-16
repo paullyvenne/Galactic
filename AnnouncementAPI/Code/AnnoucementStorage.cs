@@ -1,69 +1,78 @@
 ﻿using AnnouncementAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnnouncementAPI
 {
-    public class AnnoucementStorage 
+    public class AnnouncementStorage
     {
+        private static AnnouncementsContext db;
 
-        private static AnnoucementsContext db;
-
-        public static void InitDBContext(AnnoucementsContext annoucementsContext)
+        public static void InitDBContext(DbContextOptions<AnnouncementsContext> options)
         {
-            db = annoucementsContext;
+            db = new AnnouncementsContext(options);
         }
 
-        public static IEnumerable<Annoucement> ListAnnoucements(int pageIndex, int pageSize = 0)
+        public static void InitDBContext(string connString)
         {
-            if (pageSize == 0) return db.Annoucements.AsEnumerable();
-            else return db.Annoucements
+            var optionsBuilder = new DbContextOptionsBuilder<AnnouncementsContext>();
+            optionsBuilder.UseSqlServer(connString);
+
+            var options = new DbContextOptionsBuilder<AnnouncementsContext>().Options;
+            db = new AnnouncementsContext(options);
+        }
+
+        public static IEnumerable<Announcement> ListAnnouncements(int pageIndex, int pageSize = 0)
+        {
+            if (pageSize == 0) return db.Announcements.AsEnumerable();
+            else return db.Announcements
                     .Skip(pageIndex * pageSize)
                     .Take(pageSize)
                     .AsEnumerable();
         }
 
-        public static Annoucement? CreateAnnouncement(AnnoucementParams param) //Create
+        public static Announcement? CreateAnnouncement(AnnouncementParams param) //Create
         {
-            Annoucement annoucement = new Annoucement().CopyParams(param);
-            db.Annoucements.Add(annoucement);
+            Announcement announcement = new Announcement().CopyParams(param);
+            db.Announcements.Add(announcement);
             db.SaveChanges();
-            return annoucement;
+            return announcement;
         }
 
-        public static Annoucement? ReadAnnouncement(int id) //Read or Null
+        public static Announcement? ReadAnnouncement(int id) //Read or Null
         {
-            return db.Annoucements.SingleOrDefault(x => x.ID == id );
+            return db.Announcements.SingleOrDefault(x => x.ID == id );
         }
         
-        public static Annoucement? UpdateAnnoucement(int id, AnnoucementParams param) //Update
+        public static Announcement? UpdateAnnouncement(int id, AnnouncementParams param) //Update
         {
-            Annoucement? annoucement = ReadAnnouncement(id);
-            if(annoucement != null)
+            Announcement? announcement = ReadAnnouncement(id);
+            if(announcement != null)
             {
-                annoucement.CopyParams(param);
+                announcement.CopyParams(param);
                 db.SaveChanges();
-                return annoucement;
+                return announcement;
             }
             return null;
         }
 
-        public static Annoucement? DeleteAnnoucement(int id) //Delete
+        public static Announcement? DeleteAnnouncement(int id) //Delete
         {
-            Annoucement? annoucement = ReadAnnouncement(id);
-            if (annoucement != null)
+            Announcement? announcement = ReadAnnouncement(id);
+            if (announcement != null)
             {
-                db.Annoucements.Remove(annoucement);
+                db.Announcements.Remove(announcement);
                 db.SaveChanges();
-                return annoucement;
+                return announcement;
             }
             return null;
         }
 
-        //public static bool HasUserViewed(string userId, int annoucementId) //Mark user as having viewed annoucement
+        //public static bool HasUserViewed(string userId, int announcementId) //Mark user as having viewed announcement
         //{
         //    throw new NotImplementedException();
         //}
 
-        //public static void MarkUserAsViewed(string userId, int annoucementId) //Mark user as having viewed annoucement
+        //public static void MarkUserAsViewed(string userId, int announcementId) //Mark user as having viewed announcement
         //{
         //    throw new NotImplementedException();
         //}

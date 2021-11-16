@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+
 using AnnouncementAPI.Data;
 
 namespace AnnouncementAPI.Controllers
@@ -9,53 +11,52 @@ namespace AnnouncementAPI.Controllers
     public class AccouncementController : ControllerBase
     {
         private readonly ILogger<AccouncementController> _logger;
-        private readonly AnnoucementsContext _context;
+        private readonly DbContextOptions<AnnouncementsContext> _options;
 
-        public AccouncementController(ILogger<AccouncementController> logger, AnnoucementsContext annoucementsContext)
+        public AccouncementController(ILogger<AccouncementController> logger, DbContextOptions<AnnouncementsContext> options)
         {
             _logger = logger;
-            _context = annoucementsContext;
-            AnnoucementStorage.InitDBContext(_context);
+            _options = options; 
+            AnnouncementStorage.InitDBContext(_options);
         }
 
         [HttpGet]
         [ActionName("List")]
-        public IEnumerable<Annoucement> List() //List All
+        public IEnumerable<Announcement> List() //List All
         {
-            return AnnoucementStorage.ListAnnoucements(0, 0);
+            return AnnouncementStorage.ListAnnouncements(0, 0);
         }
 
         [HttpGet]
         [ActionName("ListByPage")]
-        public IEnumerable<Annoucement> ListByPage(int page, int pageSize) //List By Page/Size
+        public IEnumerable<Announcement> ListByPage(int page, int pageSize) //List By Page/Size
         {
-            return AnnoucementStorage.ListAnnoucements(page, pageSize);
+            return AnnouncementStorage.ListAnnouncements(page, pageSize);
         }
 
 
         [HttpPost]
         [ActionName("Create")]
-        public ConfirmationMsg Create(AnnoucementParams param) //Create
+        public ConfirmationMsg Create(AnnouncementParams param) //Create
         {
-            Annoucement? annoucement = AnnoucementStorage.CreateAnnouncement(param);
-            return new ConfirmationMsg { IsSuccessful = (annoucement!=null), Result = annoucement };
+            Announcement? announcement = AnnouncementStorage.CreateAnnouncement(param);
+            return new ConfirmationMsg { IsSuccessful = (announcement!=null), Result = announcement };
         }
 
-        [HttpPost]
+        [HttpGet]
         [ActionName("Details")]
-        public ConfirmationMsg Details(int id) //Read
+        public Announcement? Details(int id) //Read
         {
-            Annoucement? annoucement = AnnoucementStorage.ReadAnnouncement(id);
-            return new ConfirmationMsg { IsSuccessful = (annoucement != null), Result = annoucement };
+            return AnnouncementStorage.ReadAnnouncement(id);
         }
 
 
         [HttpPost]
         [ActionName("Update")]
-        public ConfirmationMsg Update(int id, AnnoucementParams param) //Update
+        public ConfirmationMsg Update(int id, AnnouncementParams param) //Update
         {
-            Annoucement? annoucement = AnnoucementStorage.UpdateAnnoucement(id, param);
-            return new ConfirmationMsg { IsSuccessful = (annoucement != null), Result = annoucement };
+            Announcement? announcement = AnnouncementStorage.UpdateAnnouncement(id, param);
+            return new ConfirmationMsg { IsSuccessful = (announcement != null), Result = announcement };
         }
 
 
@@ -63,8 +64,8 @@ namespace AnnouncementAPI.Controllers
         [ActionName("Delete")]
         public ConfirmationMsg Delete(int id) //Delete
         {
-            Annoucement? annoucement = AnnoucementStorage.DeleteAnnoucement(id);
-            return new ConfirmationMsg { IsSuccessful = (annoucement != null), Result = annoucement };
+            Announcement? announcement = AnnouncementStorage.DeleteAnnouncement(id);
+            return new ConfirmationMsg { IsSuccessful = (announcement != null), Result = announcement };
         }
 
     }

@@ -1,13 +1,13 @@
 namespace AnnouncementAPI
 {
     [Serializable]
-    public class Annoucement: AnnoucementParams
+    public class Announcement: AnnouncementParams
     {
         public int ID { get; set; }
 
-        public Annoucement CopyParams(AnnoucementParams param)
+        public Announcement CopyParams(AnnouncementParams param)
         {
-            this.AnnoucementDate = param.AnnoucementDate;
+            this.AnnouncementDate = param.AnnouncementDate;
             this.Content = param.Content;
             this.Subject = param.Subject;
             this.Author = param.Author;

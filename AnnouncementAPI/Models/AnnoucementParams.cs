@@ -1,9 +1,9 @@
 namespace AnnouncementAPI
 {
     [Serializable]
-    public class AnnoucementParams
+    public class AnnouncementParams
     {
-        public DateTime AnnoucementDate { get; set; }
+        public DateTime AnnouncementDate { get; set; }
 
         public string? Subject { get; set; }
 
