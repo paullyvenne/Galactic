@@ -11,13 +11,11 @@ namespace AnnouncementAPI.Controllers
     public class AccouncementController : ControllerBase
     {
         private readonly ILogger<AccouncementController> _logger;
-        private readonly DbContextOptions<AnnouncementsContext> _options;
 
         public AccouncementController(ILogger<AccouncementController> logger, DbContextOptions<AnnouncementsContext> options)
         {
             _logger = logger;
-            _options = options; 
-            AnnouncementStorage.InitDBContext(_options);
+            AnnouncementStorage.InitDBContext(options);
         }
 
         [HttpGet]

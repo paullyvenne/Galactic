@@ -4,15 +4,11 @@ namespace AnnouncementAPI.Data
 {
     public class AnnouncementsContext : DbContext
     {
-
-        private readonly DbContextOptions<AnnouncementsContext> options;
-
         public DbSet<Announcement> Announcements { get; set; }
 
         public AnnouncementsContext(DbContextOptions<AnnouncementsContext> options)
              : base(options)
         {
-            this.options = options;
             try
             {
                 this.Database.Migrate();
