@@ -1,5 +1,6 @@
 namespace AnnouncementAPI
 {
+    [Serializable]
     public class ConfirmationMsg
     {
         public bool IsSuccessful { get; set; }
