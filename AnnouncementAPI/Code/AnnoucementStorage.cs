@@ -17,7 +17,7 @@ namespace AnnouncementAPI
             var optionsBuilder = new DbContextOptionsBuilder<AnnouncementsContext>();
             optionsBuilder.UseSqlServer(connString);
 
-            var options = new DbContextOptionsBuilder<AnnouncementsContext>().Options;
+            var options = optionsBuilder.Options;
             db = new AnnouncementsContext(options);
         }
 

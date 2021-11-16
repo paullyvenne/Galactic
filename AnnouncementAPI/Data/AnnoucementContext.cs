@@ -19,7 +19,7 @@ namespace AnnouncementAPI.Data
 
             } catch (System.InvalidOperationException ex)
             {
-                throw new InvalidDataException("Please check connectionstring in appsettings.json is pointing to a valid database!");
+                throw new InvalidDataException("Please check DefaultConnection in appsettings.json is pointing to a valid database!");
             }
         }
 
